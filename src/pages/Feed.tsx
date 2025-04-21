@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import QueryCard from "@/components/QueryCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -23,15 +22,22 @@ const Feed = () => {
   const allSubjects = getAllSubjects();
 
   useEffect(() => {
+    // Redirect to login if not authenticated
     if (!isAuthenticated) {
       navigate("/login");
     }
-  }, [isAuthenticated, navigate]);
+    
+    // Add console logs for debugging
+    console.log("Auth state:", { isAuthenticated, currentUser });
+    console.log("Communities:", communities);
+    console.log("Queries:", queries);
+  }, [isAuthenticated, navigate, currentUser, communities, queries]);
 
   // Filter queries based on the user's communities
   const userCommunityQueries = queries.filter(query => {
+    if (!currentUser) return false;
     const subject = getSubjectById(query.subjectId);
-    return subject && currentUser?.communities.includes(subject.communityId);
+    return subject && currentUser.communities.includes(subject.communityId);
   });
   
   // Filter queries based on search and subject filter
@@ -49,6 +55,15 @@ const Feed = () => {
   
   const filteredUserQueries = filterQueries(userCommunityQueries);
   const filteredAllQueries = filterQueries(queries);
+
+  // If we're still checking authentication, show a loading state
+  if (isAuthenticated === undefined) {
+    return (
+      <div className="container py-10 text-center">
+        <p>Loading feed...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="container py-10">

@@ -1,6 +1,6 @@
 
 import { User, UserRole } from "@/types";
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { users } from "@/data/mockData";
 import { toast } from "@/components/ui/use-toast";
 
@@ -16,6 +16,11 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  
+  // Added useEffect to log the authentication state when it changes
+  useEffect(() => {
+    console.log("Auth state updated:", { currentUser, isAuthenticated: !!currentUser });
+  }, [currentUser]);
   
   const login = async (email: string, password: string) => {
     try {
@@ -33,12 +38,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       // In a real app, we'd verify the password here
       setCurrentUser(user);
+      
+      // Add a slight delay to ensure state updates properly
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
       toast({
         title: "Login Successful",
         description: `Welcome back, ${user.name}!`
       });
       return true;
     } catch (error) {
+      console.error("Login error:", error);
       toast({
         title: "Login Failed",
         description: "An error occurred",
@@ -79,8 +89,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       };
       
       // In a real app, we'd add this user to the database
-      // Here we're just setting as current user
+      users.push(newUser); // Add the new user to the mock data
+      
+      // Set as current user
       setCurrentUser(newUser);
+      
+      // Add a slight delay to ensure state updates properly
+      await new Promise(resolve => setTimeout(resolve, 100));
       
       toast({
         title: "Registration Successful",
@@ -88,6 +103,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       });
       return true;
     } catch (error) {
+      console.error("Registration error:", error);
       toast({
         title: "Registration Failed",
         description: "An error occurred",

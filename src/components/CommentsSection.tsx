@@ -46,9 +46,9 @@ const CommentsSection = ({
       )}
 
       {comments.length > 0 ? (
-        <div className="space-y-0">
+        <div className="space-y-4">
           {comments.map((comment, index) => (
-            <div key={comment.id} style={{ animationDelay: `${index * 0.05}s` }}>
+            <div key={comment.id} className="fade-in-up" style={{ animationDelay: `${index * 0.05}s` }}>
               <CommentCard comment={comment} />
             </div>
           ))}
@@ -61,4 +61,3 @@ const CommentsSection = ({
 };
 
 export default CommentsSection;
-
