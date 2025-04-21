@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
@@ -14,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { ArrowUp, ArrowDown, MessageSquare, Upload, FilePdf } from "lucide-react";
+import { ArrowUp, ArrowDown, MessageSquare, Upload, FileText } from "lucide-react";
 import ResponseCard from "@/components/ResponseCard";
 import CommentCard from "@/components/CommentCard";
 import { formatDistanceToNow } from "date-fns";
@@ -246,7 +245,7 @@ const QueryDetail = () => {
                         <div className="border-2 border-dashed border-border rounded-lg p-8 text-center cursor-pointer hover:border-primary/50 transition-colors">
                           {pdfFile ? (
                             <div className="space-y-3">
-                              <FilePdf className="w-10 h-10 mx-auto text-primary" />
+                              <FileText className="w-10 h-10 mx-auto text-primary" />
                               <p className="text-sm">{pdfFile}</p>
                               <p className="text-xs text-muted-foreground">Click to change file</p>
                             </div>

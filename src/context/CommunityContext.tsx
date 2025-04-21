@@ -8,6 +8,7 @@ interface CommunityContextType {
   getCommunityById: (id: string) => Community | undefined;
   getSubjectById: (id: string) => Subject | undefined;
   getSubjectsByCommunitiesIds: (communityIds: string[]) => Subject[];
+  getAllSubjects: () => Subject[]; // Add the missing method signature
 }
 
 const CommunityContext = createContext<CommunityContextType | undefined>(undefined);
@@ -41,13 +42,23 @@ export const CommunityProvider = ({ children }: { children: ReactNode }) => {
     }
     return subjects;
   };
+  
+  // Implement the missing getAllSubjects method
+  const getAllSubjects = () => {
+    const allSubjects: Subject[] = [];
+    for (const community of communities) {
+      allSubjects.push(...community.subjects);
+    }
+    return allSubjects;
+  };
 
   return (
     <CommunityContext.Provider value={{
       communities,
       getCommunityById,
       getSubjectById,
-      getSubjectsByCommunitiesIds
+      getSubjectsByCommunitiesIds,
+      getAllSubjects
     }}>
       {children}
     </CommunityContext.Provider>
