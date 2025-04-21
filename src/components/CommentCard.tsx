@@ -12,7 +12,7 @@ const CommentCard = ({ comment }: CommentCardProps) => {
   const author = users.find(user => user.id === comment.authorId);
 
   return (
-    <div className="px-4 py-3 border-t border-border glass-morphism rounded-b-lg shadow-sm mb-2 animate-fade-in">
+    <div className="px-4 py-3 border-t border-border glass-morphism rounded-b-lg shadow-sm mb-2 scale-in">
       <div className="flex items-start">
         <Avatar className="mr-3 h-8 w-8 border border-primary/50 shadow">
           <AvatarImage src={author?.avatar} alt={author?.name} />

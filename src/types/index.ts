@@ -35,6 +35,7 @@ export type Query = {
   downvotes: number;
   responses: Response[];
   comments: Comment[];
+  imageUrl?: string; // Optional image attachment
 };
 
 export type Response = {

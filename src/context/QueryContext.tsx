@@ -7,17 +7,30 @@ import { toast } from "@/components/ui/use-toast";
 interface QueryContextType {
   queries: Query[];
   getQueryById: (id: string) => Query | undefined;
-  createQuery: (title: string, content: string, subjectId: string, authorId: string) => void;
+  createQuery: (title: string, content: string, subjectId: string, authorId: string, imageUrl?: string) => void;
   addResponse: (queryId: string, teacherId: string, resourceUrl: string, resourceType: "pdf" | "image") => void;
   addComment: (queryId: string, authorId: string, content: string) => void;
   upvoteQuery: (queryId: string) => void;
   downvoteQuery: (queryId: string) => void;
+  addTeacherResource: (teacherId: string, title: string, description: string, fileUrl: string, fileType: "pdf") => void;
+  getTeacherResources: (teacherId: string) => TeacherResource[];
 }
+
+export type TeacherResource = {
+  id: string;
+  teacherId: string;
+  title: string;
+  description: string;
+  fileUrl: string;
+  fileType: "pdf";
+  createdAt: string;
+};
 
 const QueryContext = createContext<QueryContextType | undefined>(undefined);
 
 export const QueryProvider = ({ children }: { children: ReactNode }) => {
   const [queries, setQueries] = useState<Query[]>([]);
+  const [teacherResources, setTeacherResources] = useState<TeacherResource[]>([]);
 
   useEffect(() => {
     // In a real app, we'd fetch from an API
@@ -28,7 +41,7 @@ export const QueryProvider = ({ children }: { children: ReactNode }) => {
     return queries.find(query => query.id === id);
   };
 
-  const createQuery = (title: string, content: string, subjectId: string, authorId: string) => {
+  const createQuery = (title: string, content: string, subjectId: string, authorId: string, imageUrl?: string) => {
     const newQuery: Query = {
       id: `q${queries.length + 1}`,
       title,
@@ -39,7 +52,8 @@ export const QueryProvider = ({ children }: { children: ReactNode }) => {
       upvotes: 0,
       downvotes: 0,
       responses: [],
-      comments: []
+      comments: [],
+      imageUrl
     };
 
     setQueries(prev => [newQuery, ...prev]);
@@ -124,6 +138,29 @@ export const QueryProvider = ({ children }: { children: ReactNode }) => {
     }));
   };
 
+  const addTeacherResource = (teacherId: string, title: string, description: string, fileUrl: string, fileType: "pdf") => {
+    const newResource: TeacherResource = {
+      id: `tr${Math.random().toString(36).substr(2, 9)}`,
+      teacherId,
+      title,
+      description,
+      fileUrl,
+      fileType,
+      createdAt: new Date().toISOString()
+    };
+
+    setTeacherResources(prev => [newResource, ...prev]);
+    
+    toast({
+      title: "Resource Added",
+      description: "Your educational resource has been shared successfully"
+    });
+  };
+
+  const getTeacherResources = (teacherId: string) => {
+    return teacherResources.filter(resource => resource.teacherId === teacherId);
+  };
+
   return (
     <QueryContext.Provider value={{
       queries,
@@ -132,7 +169,9 @@ export const QueryProvider = ({ children }: { children: ReactNode }) => {
       addResponse,
       addComment,
       upvoteQuery,
-      downvoteQuery
+      downvoteQuery,
+      addTeacherResource,
+      getTeacherResources
     }}>
       {children}
     </QueryContext.Provider>

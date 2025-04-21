@@ -7,73 +7,39 @@
 
 @layer base {
   :root {
-    --background: 226 62% 15%;
+    --background: 220 70% 13%;
     --foreground: 0 0% 100%;
-    --card: 226 60% 18%;
+    --card: 220 70% 16%;
     --card-foreground: 0 0% 100%;
-    --popover: 226 60% 18%;
+    --popover: 220 70% 16%;
     --popover-foreground: 0 0% 100%;
-    --primary: 226 73% 55%;
+    --primary: 214 80% 56%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 226 30% 25%;
+    --secondary: 220 35% 30%;
     --secondary-foreground: 0 0% 100%;
-    --muted: 226 30% 25%;
+    --muted: 220 35% 30%;
     --muted-foreground: 215 20.2% 80%;
-    --accent: 226 73% 65%;
+    --accent: 214 80% 65%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    --border: 226 30% 25%;
-    --input: 226 30% 25%;
-    --ring: 226 73% 55%;
+    --border: 220 35% 30%;
+    --input: 220 35% 30%;
+    --ring: 214 80% 56%;
     --radius: 0.75rem;
   }
 
   body {
     @apply bg-background text-foreground font-agencyfb relative overflow-x-hidden;
-    background-color: hsl(var(--background));
-    background-image: 
-      url('https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=10'),
-      url('https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=10');
-    background-position: top left, bottom right;
-    background-repeat: no-repeat, no-repeat;
-    background-size: 250px 250px, 300px 300px;
+    background-color: hsl(220, 70%, 13%);
     position: relative;
-  }
-
-  /* Overlay a dark blue translucent gradient to deepen the background color */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    background: linear-gradient(135deg, rgba(13, 28, 58, 0.92), rgba(24, 39, 69, 0.9));
-    opacity: 0.95; /* Slight transparency for subtlety */
-  }
-
-  /* Watermark effect with low opacity */
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: -2;
-    pointer-events: none;
-    background-image:
-      url('https://images.unsplash.com/photo-1492321936769-b49830bc1d1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=10'),
-      url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=10');
-    background-position: center top 20%, center bottom 20%;
-    background-repeat: no-repeat, no-repeat;
-    background-size: 400px auto, 600px auto;
-    opacity: 0.07;
-    filter: grayscale(90%) brightness(130%);
   }
 }
 
 @layer components {
   .query-card {
-    @apply rounded-xl glass-morphism p-6 shadow-xl border border-border transition-all hover:shadow-2xl;
-    border: 1px solid hsla(226, 73%, 55%, 0.25);
+    @apply rounded-xl glass-morphism p-6 shadow-xl border border-border transition-all hover:shadow-2xl hover:translate-y-[-4px] duration-300;
+    border: 1px solid hsla(214, 80%, 56%, 0.25);
     background: linear-gradient(120deg, rgba(24,34,65,0.92) 60%, rgba(47,69,149,0.85) 100%);
     backdrop-filter: blur(16px);
   }
@@ -94,12 +60,77 @@
   .index-gradient-card {
     @apply p-6 rounded-2xl text-center border shadow-lg glass-morphism;
     background: linear-gradient(112deg,rgba(54,69,130,0.7) 75%,rgba(22,28,49,0.95) 100%);
-    border: 1.5px solid hsla(226,73%,60%,0.18);
+    border: 1.5px solid hsla(214,80%,60%,0.18);
     box-shadow: 0 8px 32px 0 rgba(47,69,149,0.16);
-    transition: transform 0.22s;
+    transition: transform 0.3s, box-shadow 0.3s;
   }
   .index-gradient-card:hover {
     transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 36px 0 rgba(47,69,149,0.25);
+  }
+  
+  /* Voting buttons */
+  .vote-button {
+    @apply flex items-center gap-1 p-2 rounded-md transition-all duration-200;
+  }
+  .upvote-button {
+    @apply vote-button text-gray-300 hover:text-green-400 hover:bg-green-400/10;
+  }
+  .downvote-button {
+    @apply vote-button text-gray-300 hover:text-red-400 hover:bg-red-400/10;
+  }
+  
+  /* Animation classes */
+  .fade-in-up {
+    animation: fadeInUp 0.5s ease forwards;
+  }
+  .fade-in {
+    animation: fadeIn 0.5s ease forwards;
+  }
+  .scale-in {
+    animation: scaleIn 0.3s ease forwards;
+  }
+  .slide-in-right {
+    animation: slideInRight 0.4s ease forwards;
+  }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
@@ -115,4 +146,3 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #2b355b;
 }
-
