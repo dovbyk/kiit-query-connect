@@ -10,15 +10,15 @@ interface CommentCardProps {
 
 const CommentCard = ({ comment }: CommentCardProps) => {
   const author = users.find(user => user.id === comment.authorId);
-  
+
   return (
-    <div className="py-3 border-t border-border">
+    <div className="px-4 py-3 border-t border-border glass-morphism rounded-b-lg shadow-sm mb-2 animate-fade-in">
       <div className="flex items-start">
-        <Avatar className="mr-3 h-6 w-6">
+        <Avatar className="mr-3 h-8 w-8 border border-primary/50 shadow">
           <AvatarImage src={author?.avatar} alt={author?.name} />
           <AvatarFallback>{author?.name?.charAt(0)}</AvatarFallback>
         </Avatar>
-        
+
         <div className="flex-1">
           <div className="flex items-center gap-2">
             <p className="font-semibold text-sm">{author?.name}</p>
@@ -26,7 +26,6 @@ const CommentCard = ({ comment }: CommentCardProps) => {
               {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
             </span>
           </div>
-          
           <p className="mt-1 text-sm">{comment.content}</p>
         </div>
       </div>

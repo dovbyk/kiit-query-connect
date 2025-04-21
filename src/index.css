@@ -9,50 +9,75 @@
   :root {
     --background: 226 62% 15%;
     --foreground: 0 0% 100%;
-
     --card: 226 60% 18%;
     --card-foreground: 0 0% 100%;
-
     --popover: 226 60% 18%;
     --popover-foreground: 0 0% 100%;
-
     --primary: 226 73% 55%;
     --primary-foreground: 0 0% 100%;
-
     --secondary: 226 30% 25%;
     --secondary-foreground: 0 0% 100%;
-
     --muted: 226 30% 25%;
     --muted-foreground: 215 20.2% 80%;
-
     --accent: 226 73% 65%;
     --accent-foreground: 0 0% 100%;
-
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 226 30% 25%;
     --input: 226 30% 25%;
     --ring: 226 73% 55%;
-
-    --radius: 0.5rem;
+    --radius: 0.75rem;
   }
 
   body {
     @apply bg-background text-foreground font-agencyfb;
+    background: linear-gradient(120deg, #232b47 0%, #1a1f2c 100%);
+    min-height: 100vh;
   }
 }
 
 @layer components {
   .query-card {
-    @apply rounded-lg bg-card p-5 shadow-md border border-border transition-all hover:shadow-lg;
+    @apply rounded-xl glass-morphism p-6 shadow-xl border border-border transition-all hover:shadow-2xl;
+    border: 1px solid hsla(226, 73%, 55%, 0.25);
+    background: linear-gradient(120deg, rgba(24,34,65,0.92) 60%, rgba(47,69,149,0.85) 100%);
+    backdrop-filter: blur(16px);
   }
-  
+
+  .glass-morphism {
+    @apply bg-white/5 backdrop-blur-xl border border-white/20;
+  }
+
   .btn-primary {
     @apply bg-primary hover:bg-primary/80 text-white rounded-md px-4 py-2 transition-colors;
+    box-shadow: 0 4px 18px 2px rgba(47,69,149,0.15);
   }
-  
+
   .btn-secondary {
     @apply bg-secondary hover:bg-secondary/80 text-white rounded-md px-4 py-2 transition-colors;
   }
+
+  .index-gradient-card {
+    @apply p-6 rounded-2xl text-center border shadow-lg glass-morphism;
+    background: linear-gradient(112deg,rgba(54,69,130,0.7) 75%,rgba(22,28,49,0.95) 100%);
+    border: 1.5px solid hsla(226,73%,60%,0.18);
+    box-shadow: 0 8px 32px 0 rgba(47,69,149,0.16);
+    transition: transform 0.22s;
+  }
+  .index-gradient-card:hover {
+    transform: translateY(-4px) scale(1.02);
+  }
+}
+
+/* Custom scrollbar for modern look */
+::-webkit-scrollbar {
+  width: 8px;
+  background: #232b47;
+}
+::-webkit-scrollbar-thumb {
+  background: #334077;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2b355b;
 }
