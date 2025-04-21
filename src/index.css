@@ -30,9 +30,43 @@
   }
 
   body {
-    @apply bg-background text-foreground font-agencyfb;
-    background: linear-gradient(120deg, #232b47 0%, #1a1f2c 100%);
-    min-height: 100vh;
+    @apply bg-background text-foreground font-agencyfb relative overflow-x-hidden;
+    background-color: hsl(var(--background));
+    background-image: 
+      url('https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=10'),
+      url('https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=10');
+    background-position: top left, bottom right;
+    background-repeat: no-repeat, no-repeat;
+    background-size: 250px 250px, 300px 300px;
+    position: relative;
+  }
+
+  /* Overlay a dark blue translucent gradient to deepen the background color */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(13, 28, 58, 0.92), rgba(24, 39, 69, 0.9));
+    opacity: 0.95; /* Slight transparency for subtlety */
+  }
+
+  /* Watermark effect with low opacity */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    background-image:
+      url('https://images.unsplash.com/photo-1492321936769-b49830bc1d1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=10'),
+      url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=10');
+    background-position: center top 20%, center bottom 20%;
+    background-repeat: no-repeat, no-repeat;
+    background-size: 400px auto, 600px auto;
+    opacity: 0.07;
+    filter: grayscale(90%) brightness(130%);
   }
 }
 
@@ -81,3 +115,4 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #2b355b;
 }
+
