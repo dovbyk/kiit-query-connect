@@ -94,8 +94,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // Set as current user
       setCurrentUser(newUser);
       
-      // Add a slight delay to ensure state updates properly
-      await new Promise(resolve => setTimeout(resolve, 100));
+      // Add a longer delay to ensure state updates properly before redirect
+      await new Promise(resolve => setTimeout(resolve, 300));
       
       toast({
         title: "Registration Successful",

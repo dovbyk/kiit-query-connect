@@ -165,4 +165,3 @@ const TeacherResourceUpload = ({
 };
 
 export default TeacherResourceUpload;
-

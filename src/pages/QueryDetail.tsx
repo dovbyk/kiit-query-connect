@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { useQueries } from "@/context/QueryContext";
@@ -30,7 +30,10 @@ const QueryDetail = () => {
     if (!query) {
       navigate("/feed");
     }
-  }, [query, navigate]);
+    
+    // Add console logs for debugging
+    console.log("Query detail loaded:", { query, currentUser, isAuthenticated });
+  }, [query, navigate, currentUser, isAuthenticated]);
 
   if (!query) {
     return null;
@@ -152,4 +155,3 @@ const QueryDetail = () => {
 };
 
 export default QueryDetail;
-

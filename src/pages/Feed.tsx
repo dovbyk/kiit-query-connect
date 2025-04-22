@@ -9,6 +9,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card, CardContent } from "@/components/ui/card";
+import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 const Feed = () => {
   const { currentUser, isAuthenticated } = useAuth();
@@ -18,19 +21,31 @@ const Feed = () => {
   
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
+  const [openSearch, setOpenSearch] = useState(false);
+  const [loading, setLoading] = useState(true);
   
   const allSubjects = getAllSubjects();
 
   useEffect(() => {
-    // Redirect to login if not authenticated
-    if (!isAuthenticated) {
-      navigate("/login");
-    }
+    console.log("Feed rendered with auth state:", { isAuthenticated, currentUser });
     
-    // Add console logs for debugging
-    console.log("Auth state:", { isAuthenticated, currentUser });
+    // Check authentication after a short delay to ensure state is updated
+    const checkAuth = setTimeout(() => {
+      if (isAuthenticated === false) {
+        console.log("Not authenticated, redirecting to login");
+        navigate("/login");
+      } else {
+        console.log("Authentication verified");
+        setLoading(false);
+      }
+    }, 500);
+    
+    // More detailed logging for debugging
     console.log("Communities:", communities);
-    console.log("Queries:", queries);
+    console.log("Queries available:", queries);
+    console.log("Current user communities:", currentUser?.communities);
+    
+    return () => clearTimeout(checkAuth);
   }, [isAuthenticated, navigate, currentUser, communities, queries]);
 
   // Filter queries based on the user's communities
@@ -56,11 +71,16 @@ const Feed = () => {
   const filteredUserQueries = filterQueries(userCommunityQueries);
   const filteredAllQueries = filterQueries(queries);
 
-  // If we're still checking authentication, show a loading state
-  if (isAuthenticated === undefined) {
+  // If we're still checking authentication or loading, show a loading state
+  if (loading) {
     return (
       <div className="container py-10 text-center">
-        <p>Loading feed...</p>
+        <div className="max-w-md mx-auto glass-morphism p-10 rounded-xl">
+          <p className="text-lg">Loading feed...</p>
+          <div className="mt-4 h-2 bg-primary/20 rounded-full overflow-hidden">
+            <div className="h-full bg-primary animate-pulse" style={{ width: '70%' }}></div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -70,6 +90,43 @@ const Feed = () => {
       <h1 className="text-3xl font-bold mb-8 text-gradient-primary fade-in">Query Feed</h1>
       
       <div className="max-w-2xl mx-auto">
+        {/* Global Search Bar */}
+        <Popover open={openSearch} onOpenChange={setOpenSearch}>
+          <PopoverTrigger asChild>
+            <div className="relative w-full mb-6 fade-in-up">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Input
+                className="pl-9 pr-4 py-6 text-lg"
+                placeholder="Search all queries..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onClick={() => setOpenSearch(true)}
+              />
+            </div>
+          </PopoverTrigger>
+          <PopoverContent className="w-full p-0" align="start">
+            <Command>
+              <CommandInput placeholder="Search queries..." value={searchTerm} onValueChange={setSearchTerm} />
+              <CommandList>
+                <CommandEmpty>No results found.</CommandEmpty>
+                <CommandGroup>
+                  {allSubjects.map((subject) => (
+                    <CommandItem
+                      key={subject.id}
+                      onSelect={() => {
+                        setSelectedSubject(subject.id);
+                        setOpenSearch(false);
+                      }}
+                    >
+                      {subject.name}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+          </PopoverContent>
+        </Popover>
+        
         {/* Search and Filter Section */}
         <div className="glass-morphism p-4 rounded-lg mb-6 fade-in-up">
           <div className="flex flex-col md:flex-row gap-4">
@@ -77,7 +134,7 @@ const Feed = () => {
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
                 className="pl-9"
-                placeholder="Search queries..."
+                placeholder="Filter current view..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
