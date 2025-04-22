@@ -29,9 +29,13 @@ const Feed = () => {
   }, [currentUser, navigate]);
 
   // Create combined feed of queries and resources
+  // Ensure we have arrays before trying to map them
+  const queriesArray = queries || [];
+  const resourcesArray = teacherResources || [];
+  
   const allItems = [
-    ...queries.map(q => ({ ...q, type: 'query' })),
-    ...teacherResources.map(r => ({
+    ...queriesArray.map(q => ({ ...q, type: 'query' })),
+    ...resourcesArray.map(r => ({
       id: r.id,
       title: r.title,
       content: r.description,

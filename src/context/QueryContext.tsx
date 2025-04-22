@@ -1,3 +1,4 @@
+
 import { Comment, Query, Response, TeacherResource } from "@/types";
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { queries as mockQueries } from "@/data/mockData";
@@ -5,7 +6,7 @@ import { toast } from "@/components/ui/use-toast";
 
 interface QueryContextType {
   queries: Query[];
-  teacherResources: TeacherResource[]; // Add this property
+  teacherResources: TeacherResource[];
   getQueryById: (id: string) => Query | undefined;
   createQuery: (title: string, content: string, subjectId: string, authorId: string, imageUrl?: string) => void;
   addResponse: (queryId: string, teacherId: string, resourceUrl: string, resourceType: "pdf" | "image") => void;
@@ -20,6 +21,7 @@ const QueryContext = createContext<QueryContextType | undefined>(undefined);
 
 export const QueryProvider = ({ children }: { children: ReactNode }) => {
   const [queries, setQueries] = useState<Query[]>([]);
+  // Initialize teacherResources as an empty array to avoid undefined errors
   const [teacherResources, setTeacherResources] = useState<TeacherResource[]>([]);
 
   useEffect(() => {
@@ -154,7 +156,7 @@ export const QueryProvider = ({ children }: { children: ReactNode }) => {
   return (
     <QueryContext.Provider value={{
       queries,
-      teacherResources, // Add teacherResources to the context value
+      teacherResources,
       getQueryById,
       createQuery,
       addResponse,
