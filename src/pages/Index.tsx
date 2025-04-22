@@ -1,6 +1,7 @@
 
 import { useAuth } from "@/context/AuthContext";
-import { useNavigate, useEffect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react"; // Corrected import
 import { Button } from "@/components/ui/button";
 
 const Index = () => {
