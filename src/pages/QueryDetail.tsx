@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
@@ -19,7 +20,7 @@ const QueryDetail = () => {
   const navigate = useNavigate();
 
   const { currentUser, isAuthenticated } = useAuth();
-  const { getQueryById, addComment, addResponse, upvoteQuery, downvoteQuery } =
+  const { getQueryById, addComment, addResponse, upvoteQuery, downvoteQuery, addTeacherResource } =
     useQueries();
   const { getSubjectById } = useCommunities();
 
@@ -50,6 +51,11 @@ const QueryDetail = () => {
   const handleAddResponse = (resourceUrl: string, resourceType: "pdf" | "image") => {
     if (!isAuthenticated || !resourceUrl.trim() || currentUser?.role !== "teacher") return;
     addResponse(query.id, currentUser!.id, resourceUrl, resourceType);
+  };
+
+  const handleUploadResource = (title: string, description: string, fileUrl: string) => {
+    if (!isAuthenticated || currentUser?.role !== "teacher") return;
+    addTeacherResource(currentUser!.id, title, description, fileUrl, "pdf");
   };
 
   return (
@@ -116,6 +122,7 @@ const QueryDetail = () => {
         {currentUser?.role === "teacher" && (
           <TeacherResourceUpload
             onAddResponse={handleAddResponse}
+            onUploadResource={handleUploadResource}
           />
         )}
 

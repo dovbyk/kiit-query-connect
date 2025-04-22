@@ -1,4 +1,3 @@
-
 import { User, UserRole } from "@/types";
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { users } from "@/data/mockData";

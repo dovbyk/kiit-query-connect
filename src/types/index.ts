@@ -1,3 +1,4 @@
+
 export interface Query {
   id: string;
   title: string;
@@ -36,7 +37,10 @@ export interface User {
   avatar: string;
   role: "student" | "teacher";
   communities: string[];
+  responseCount?: number; // Add this property as optional
 }
+
+export type UserRole = "student" | "teacher"; // Add UserRole type
 
 export interface Subject {
   id: string;
@@ -47,8 +51,22 @@ export interface Subject {
 export interface Community {
   id: string;
   name: string;
+  description?: string; // Add description property
+  subjects: Subject[]; // Add subjects property
 }
 
 export interface TeacherResourceUploadProps {
   onAddResponse: (resourceUrl: string, resourceType: "pdf" | "image") => void;
+  onUploadResource: (resourceTitle: string, resourceDescription: string, pdfFileName: string) => void;
+  loading?: boolean;
+}
+
+export interface TeacherResource {
+  id: string;
+  teacherId: string;
+  title: string;
+  description: string;
+  fileUrl: string;
+  fileType: "pdf";
+  createdAt: string;
 }

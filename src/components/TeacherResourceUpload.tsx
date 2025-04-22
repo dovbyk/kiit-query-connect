@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -8,16 +7,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Upload, FileText } from "lucide-react";
 import { Card, CardContent } from "./ui/card";
-
-interface TeacherResourceUploadProps {
-  onAddResponse: (resourceUrl: string, resourceType: "pdf" | "image") => void;
-  onUploadResource: (resourceTitle: string, resourceDescription: string, pdfFileName: string) => void;
-  loading?: boolean;
-}
+import { TeacherResourceUploadProps } from "@/types";
 
 const TeacherResourceUpload = ({
   onAddResponse,
   onUploadResource,
+  loading = false,
 }: TeacherResourceUploadProps) => {
   const [resourceUrl, setResourceUrl] = useState("");
   const [resourceType, setResourceType] = useState<"pdf" | "image">("pdf");
