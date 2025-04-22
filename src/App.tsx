@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -16,6 +15,7 @@ import Feed from "./pages/Feed";
 import AskQuery from "./pages/AskQuery";
 import QueryDetail from "./pages/QueryDetail";
 import Profile from "./pages/Profile";
+import ShareMaterials from "./pages/ShareMaterials";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +35,7 @@ const App = () => (
                 <Route path="/register" element={<Register />} />
                 <Route path="/feed" element={<Feed />} />
                 <Route path="/ask" element={<AskQuery />} />
+                <Route path="/share-materials" element={<ShareMaterials />} />
                 <Route path="/query/:id" element={<QueryDetail />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="*" element={<NotFound />} />
