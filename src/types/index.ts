@@ -1,30 +1,4 @@
-
-export type UserRole = 'student' | 'teacher';
-
-export type Community = {
-  id: string;
-  name: string;
-  description: string;
-  subjects: Subject[];
-};
-
-export type Subject = {
-  id: string;
-  name: string;
-  communityId: string;
-};
-
-export type User = {
-  id: string;
-  name: string;
-  email: string;
-  role: UserRole;
-  avatar?: string;
-  communities: string[]; // community IDs
-  responseCount?: number; // for teachers
-};
-
-export type Query = {
+export interface Query {
   id: string;
   title: string;
   content: string;
@@ -35,22 +9,46 @@ export type Query = {
   downvotes: number;
   responses: Response[];
   comments: Comment[];
-  imageUrl?: string; // Optional image attachment
-};
+  imageUrl?: string;
+}
 
-export type Response = {
+export interface Response {
   id: string;
   queryId: string;
   teacherId: string;
-  resourceUrl: string; // URL to PDF or image
-  resourceType: 'pdf' | 'image';
+  resourceUrl: string;
+  resourceType: "pdf" | "image";
   createdAt: string;
-};
+}
 
-export type Comment = {
+export interface Comment {
   id: string;
   queryId: string;
   authorId: string;
   content: string;
   createdAt: string;
-};
+}
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  avatar: string;
+  role: "student" | "teacher";
+  communities: string[];
+}
+
+export interface Subject {
+  id: string;
+  name: string;
+  communityId: string;
+}
+
+export interface Community {
+  id: string;
+  name: string;
+}
+
+export interface TeacherResourceUploadProps {
+  onAddResponse: (resourceUrl: string, resourceType: "pdf" | "image") => void;
+}

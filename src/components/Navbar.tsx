@@ -20,6 +20,9 @@ const Navbar = () => {
               {currentUser?.role === "student" && (
                 <Link to="/ask" className="hover:text-accent">Ask Query</Link>
               )}
+              {currentUser?.role === "teacher" && (
+                <Link to="/share-materials" className="hover:text-accent">Share Resources</Link>
+              )}
               
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

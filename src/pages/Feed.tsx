@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 
 const Feed = () => {
   const { currentUser } = useAuth();
-  const { queries } = useQueries();
+  const { queries, teacherResources } = useQueries();
   const { getSubjectById } = useCommunities();
   const navigate = useNavigate();
   
@@ -28,21 +28,47 @@ const Feed = () => {
     }
   }, [currentUser, navigate]);
 
-  // Filter queries to show only those from the user's community
-  const communityQueries = queries.filter(query => {
+  // Create combined feed of queries and resources
+  const allItems = [
+    ...queries.map(q => ({ ...q, type: 'query' })),
+    ...teacherResources.map(r => ({
+      id: r.id,
+      title: r.title,
+      content: r.description,
+      subjectId: 'educational-resource', // Special subject ID for resources
+      authorId: r.teacherId,
+      createdAt: r.createdAt,
+      type: 'resource',
+      fileUrl: r.fileUrl,
+      fileType: r.fileType,
+      upvotes: 0,
+      downvotes: 0,
+      responses: [],
+      comments: []
+    }))
+  ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+  // Filter items to show only those from user's community
+  const communityItems = allItems.filter(item => {
     if (!currentUser) return false;
-    const subject = getSubjectById(query.subjectId);
+    if (item.type === 'resource') return true; // Always show educational resources
+    const subject = getSubjectById(item.subjectId);
     return subject && currentUser.communities.includes(subject.communityId);
   });
   
-  // Filter queries based on search
-  const filteredQueries = communityQueries.filter(query => {
+  // Filter based on search
+  const filteredItems = communityItems.filter(item => {
     if (searchTerm === "") return true;
     
-    const subject = getSubjectById(query.subjectId);
+    if (item.type === 'resource') {
+      return item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+             item.content.toLowerCase().includes(searchTerm.toLowerCase());
+    }
+    
+    const subject = getSubjectById(item.subjectId);
     return subject?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-           query.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-           query.content.toLowerCase().includes(searchTerm.toLowerCase());
+           item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+           item.content.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
   if (loading) {
@@ -84,30 +110,18 @@ const Feed = () => {
           )}
         </div>
 
-        {/* Teacher's Share Materials Link */}
-        {currentUser?.role === "teacher" && (
-          <div className="mb-6 text-center fade-in">
-            <Button 
-              onClick={() => navigate("/share-materials")}
-              className="bg-primary hover:bg-primary/90"
-            >
-              Share Educational Materials
-            </Button>
-          </div>
-        )}
-
         {/* Queries List */}
         <div className="space-y-4">
-          {filteredQueries.length > 0 ? (
-            filteredQueries.map((query, index) => (
-              <div key={query.id} className="fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
-                <QueryCard query={query} />
+          {filteredItems.length > 0 ? (
+            filteredItems.map((item, index) => (
+              <div key={item.id} className="fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
+                <QueryCard query={item} />
               </div>
             ))
           ) : (
             <div className="text-center py-10 glass-morphism rounded-xl shadow fade-in">
               <p className="text-muted-foreground">
-                {searchTerm ? "No queries match your search." : "No queries available in your community."}
+                {searchTerm ? "No items match your search." : "No items available in your community."}
               </p>
             </div>
           )}
