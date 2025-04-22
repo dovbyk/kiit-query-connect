@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
@@ -9,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowUp, ArrowDown, MessageSquare } from "lucide-react";
+import { ArrowUp, ArrowDown, MessageSquare, FileText } from "lucide-react";
 import ResponseCard from "@/components/ResponseCard";
 import { formatDistanceToNow } from "date-fns";
 import TeacherResourceUpload from "@/components/TeacherResourceUpload";
@@ -51,11 +50,6 @@ const QueryDetail = () => {
   const handleAddResponse = (resourceUrl: string, resourceType: "pdf" | "image") => {
     if (!isAuthenticated || !resourceUrl.trim() || currentUser?.role !== "teacher") return;
     addResponse(query.id, currentUser!.id, resourceUrl, resourceType);
-  };
-
-  const handleUploadResource = (title: string, description: string, fileUrl: string) => {
-    if (!isAuthenticated || currentUser?.role !== "teacher") return;
-    addTeacherResource(currentUser!.id, title, description, fileUrl, "pdf");
   };
 
   return (
@@ -119,12 +113,12 @@ const QueryDetail = () => {
           </CardContent>
         </Card>
 
-        {currentUser?.role === "teacher" && (
-          <TeacherResourceUpload
-            onAddResponse={handleAddResponse}
-            onUploadResource={handleUploadResource}
-          />
-        )}
+      {currentUser?.role === "teacher" && (
+        <TeacherResourceUpload
+          onAddResponse={handleAddResponse}
+          onUploadResource={() => {}} // Empty function since we don't need this functionality here
+        />
+      )}
 
         {query.responses.length > 0 && (
           <div className="mb-8">

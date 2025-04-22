@@ -1,4 +1,3 @@
-
 import { Query } from "@/types";
 import { useAuth } from "@/context/AuthContext";
 import { useCommunities } from "@/context/CommunityContext";
@@ -6,7 +5,7 @@ import { useQueries } from "@/context/QueryContext";
 import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
-import { ArrowUp, ArrowDown, MessageSquare } from "lucide-react";
+import { ArrowUp, ArrowDown, MessageSquare, FileText, Link as LinkIcon } from "lucide-react";
 import { Badge } from "./ui/badge";
 import { users } from "@/data/mockData";
 import { formatDistanceToNow } from "date-fns";
@@ -80,17 +79,32 @@ const QueryCard = ({ query }: QueryCardProps) => {
               <Link to={`/query/${query.id}`} className="block mt-2 hover:text-accent transition-colors">
                 <h3 className="text-xl font-bold text-gradient-primary drop-shadow">{query.title}</h3>
                 <p className="mt-2 text-base opacity-90">{query.content}</p>
-                
-                {query.imageUrl && (
-                  <div className="mt-3 rounded-lg overflow-hidden border border-border">
-                    <img 
-                      src={query.imageUrl} 
-                      alt="Query attachment" 
-                      className="max-h-64 w-auto object-contain"
-                    />
-                  </div>
-                )}
-              </Link>
+              
+              {query.type === 'resource' && query.fileUrl && (
+                <div className="mt-3 flex items-center gap-2 text-primary hover:text-primary/80">
+                  <FileText className="h-4 w-4" />
+                  <a 
+                    href={query.fileUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm font-medium hover:underline inline-flex items-center gap-1"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    View PDF Resource <LinkIcon className="h-3 w-3" />
+                  </a>
+                </div>
+              )}
+              
+              {query.imageUrl && (
+                <div className="mt-3 rounded-lg overflow-hidden border border-border">
+                  <img 
+                    src={query.imageUrl} 
+                    alt="Query attachment" 
+                    className="max-h-64 w-auto object-contain"
+                  />
+                </div>
+              )}
+            </Link>
 
               <div className="flex items-center justify-end mt-4">
                 <div className="flex items-center gap-2">
