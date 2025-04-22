@@ -44,8 +44,13 @@ const Register = () => {
     const success = await register(name, email, password, role, selectedCommunities);
     
     setIsLoading(false);
+    
     if (success) {
-      navigate("/feed");
+      console.log("Registration successful, redirecting to feed");
+      // Add a slight delay to ensure the auth state is updated before navigating
+      setTimeout(() => {
+        navigate("/feed");
+      }, 500);
     }
   };
   

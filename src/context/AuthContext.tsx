@@ -15,11 +15,22 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  // Use localStorage to persist authentication state
+  const storedUser = localStorage.getItem('currentUser');
+  const initialUser = storedUser ? JSON.parse(storedUser) : null;
+  
+  const [currentUser, setCurrentUser] = useState<User | null>(initialUser);
   
   // Added useEffect to log the authentication state when it changes
   useEffect(() => {
     console.log("Auth state updated:", { currentUser, isAuthenticated: !!currentUser });
+    
+    // When currentUser changes, update localStorage
+    if (currentUser) {
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    } else {
+      localStorage.removeItem('currentUser');
+    }
   }, [currentUser]);
   
   const login = async (email: string, password: string) => {
@@ -94,8 +105,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // Set as current user
       setCurrentUser(newUser);
       
-      // Add a longer delay to ensure state updates properly before redirect
-      await new Promise(resolve => setTimeout(resolve, 300));
+      // Log for debugging
+      console.log("Registration complete, new user:", newUser);
+      console.log("Updated users array:", users);
       
       toast({
         title: "Registration Successful",

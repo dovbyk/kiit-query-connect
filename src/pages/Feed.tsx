@@ -9,7 +9,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent } from "@/components/ui/card";
 import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
@@ -27,26 +26,20 @@ const Feed = () => {
   const allSubjects = getAllSubjects();
 
   useEffect(() => {
-    console.log("Feed rendered with auth state:", { isAuthenticated, currentUser });
-    
-    // Check authentication after a short delay to ensure state is updated
-    const checkAuth = setTimeout(() => {
-      if (isAuthenticated === false) {
-        console.log("Not authenticated, redirecting to login");
-        navigate("/login");
-      } else {
-        console.log("Authentication verified");
-        setLoading(false);
-      }
-    }, 500);
-    
-    // More detailed logging for debugging
-    console.log("Communities:", communities);
+    console.log("Feed component mounting");
+    console.log("Auth state in Feed:", { isAuthenticated, currentUser });
     console.log("Queries available:", queries);
-    console.log("Current user communities:", currentUser?.communities);
+    console.log("Communities:", communities);
     
-    return () => clearTimeout(checkAuth);
-  }, [isAuthenticated, navigate, currentUser, communities, queries]);
+    // If not authenticated, redirect to login
+    if (!currentUser) {
+      console.log("No current user, redirecting to login");
+      navigate("/login");
+    } else {
+      console.log("User authenticated, showing feed");
+      setLoading(false);
+    }
+  }, [currentUser, navigate]);
 
   // Filter queries based on the user's communities
   const userCommunityQueries = queries.filter(query => {

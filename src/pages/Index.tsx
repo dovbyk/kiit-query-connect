@@ -1,11 +1,16 @@
 
 import { useAuth } from "@/context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useEffect } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const Index = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, currentUser } = useAuth();
   const navigate = useNavigate();
+  
+  useEffect(() => {
+    // Debug info
+    console.log("Index page rendered with auth state:", { isAuthenticated, currentUser });
+  }, [isAuthenticated, currentUser]);
 
   return (
     <div className="min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center text-center px-4">
@@ -29,7 +34,14 @@ const Index = () => {
             </Button>
           </>
         ) : (
-          <Button size="lg" className="btn-primary font-bold px-8 shadow-lg" onClick={() => navigate("/feed")}>
+          <Button 
+            size="lg" 
+            className="btn-primary font-bold px-8 shadow-lg" 
+            onClick={() => {
+              console.log("Navigating to feed from index");
+              navigate("/feed");
+            }}
+          >
             Go to Feed
           </Button>
         )}
