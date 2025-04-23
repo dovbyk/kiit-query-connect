@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { Home, BookPlus, FileText, User, LogOut } from "lucide-react";
+import { ThemeToggle } from "./ThemeToggle";
 
 const Navbar = () => {
   const { currentUser, isAuthenticated, logout } = useAuth();
@@ -22,6 +23,7 @@ const Navbar = () => {
         </Link>
         
         <div className="flex items-center gap-1 md:gap-3">
+          <ThemeToggle />
           {isAuthenticated ? (
             <>
               <Link to="/feed" className={`hidden md:flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors ${
