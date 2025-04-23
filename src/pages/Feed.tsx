@@ -13,6 +13,11 @@ import { Badge } from "@/components/ui/badge";
 import TopTeachersCard from "@/components/TopTeachersCard";
 import TopSubjectsCard from "@/components/TopSubjectsCard";
 
+import FeedSearchBar from "@/components/FeedSearchBar";
+import FeedTabs from "@/components/FeedTabs";
+import FeedStatsBar from "@/components/FeedStatsBar";
+import FeedList from "@/components/FeedList";
+
 const Feed = () => {
   const { currentUser } = useAuth();
   const { queries, teacherResources } = useQueries();
@@ -110,102 +115,22 @@ const Feed = () => {
               <p className="text-muted-foreground">Discover queries and resources from your communities</p>
             </div>
             
-            {/* Enhanced Search Bar */}
-            <div className="relative w-full mb-8 fade-in-up">
-              <div className="flex gap-2">
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    className="pl-9 pr-4 py-6 bg-card/60 backdrop-blur-sm text-lg border-primary/20 shadow-sm"
-                    placeholder="Search queries, subjects, resources..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                  {searchTerm && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="absolute right-2 top-2 hover:bg-background/30"
-                      onClick={() => setSearchTerm("")}
-                    >
-                      Clear
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </div>
+            {/* Search Bar */}
+            <FeedSearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
-            {/* Tabs for filtering */}
-            <Tabs 
-              defaultValue="all" 
-              value={activeTab} 
-              onValueChange={setActiveTab}
-              className="w-full mb-6 fade-in-up" 
-              style={{ animationDelay: '0.2s' }}
-            >
-              <TabsList className="w-full max-w-md mx-auto grid grid-cols-3 bg-card/60 backdrop-blur-sm">
-                <TabsTrigger value="all" className="data-[state=active]:bg-primary/10">
-                  All
-                </TabsTrigger>
-                <TabsTrigger value="queries" className="data-[state=active]:bg-primary/10">
-                  <div className="flex items-center gap-1">
-                    <Sparkles className="h-3.5 w-3.5" />
-                    <span>Queries</span>
-                  </div>
-                </TabsTrigger>
-                <TabsTrigger value="resources" className="data-[state=active]:bg-primary/10">
-                  <div className="flex items-center gap-1">
-                    <BookOpen className="h-3.5 w-3.5" />
-                    <span>Resources</span>
-                  </div>
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
-
+            {/* Tabs */}
+            <FeedTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+            
             {/* Filter stats */}
-            <div className="flex items-center justify-between mb-6 text-sm text-muted-foreground fade-in-up" style={{ animationDelay: '0.3s' }}>
-              <div className="flex items-center gap-2">
-                <Filter className="h-4 w-4" />
-                <span>Showing {filteredItems.length} items</span>
-              </div>
-              {searchTerm && (
-                <Badge variant="outline" className="bg-primary/5">
-                  Search: "{searchTerm}"
-                </Badge>
-              )}
-            </div>
+            <FeedStatsBar filteredLength={filteredItems.length} searchTerm={searchTerm} />
 
             {/* Queries List */}
-            <div className="space-y-4">
-              {filteredItems.length > 0 ? (
-                filteredItems.map((item, index) => (
-                  <div 
-                    key={item.id} 
-                    className="fade-in-up" 
-                    style={{ animationDelay: `${0.1 + index * 0.1}s` }}
-                  >
-                    <QueryCard query={item} />
-                  </div>
-                ))
-              ) : (
-                <div className="text-center py-10 glass-morphism rounded-xl shadow-md backdrop-blur-xl fade-in bg-card/60">
-                  <p className="text-muted-foreground">
-                    {searchTerm ? "No items match your search." : "No items available in your community."}
-                  </p>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="mt-4 border-primary/30 hover:bg-primary/10"
-                    onClick={() => {
-                      setSearchTerm("");
-                      setActiveTab("all");
-                    }}
-                  >
-                    Clear filters
-                  </Button>
-                </div>
-              )}
-            </div>
+            <FeedList
+              filteredItems={filteredItems}
+              setSearchTerm={setSearchTerm}
+              setActiveTab={setActiveTab}
+              searchTerm={searchTerm}
+            />
           </div>
         </div>
 
