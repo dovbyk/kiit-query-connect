@@ -6,8 +6,11 @@ import { useCommunities } from "@/context/CommunityContext";
 import { useNavigate } from "react-router-dom";
 import QueryCard from "@/components/QueryCard";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Search, Filter, BookOpen, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
 
 const Feed = () => {
   const { currentUser } = useAuth();
@@ -16,6 +19,7 @@ const Feed = () => {
   const navigate = useNavigate();
   
   const [searchTerm, setSearchTerm] = useState("");
+  const [activeTab, setActiveTab] = useState("all");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -60,19 +64,20 @@ const Feed = () => {
     return subject && currentUser.communities.includes(subject.communityId);
   });
   
-  // Filter based on search
+  // Filter based on search and active tab
   const filteredItems = communityItems.filter(item => {
-    if (searchTerm === "") return true;
+    const matchesSearch = searchTerm === "" || 
+      item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (item.type === 'query' && 
+       getSubjectById(item.subjectId)?.name.toLowerCase().includes(searchTerm.toLowerCase()));
     
-    if (item.type === 'resource') {
-      return item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-             item.content.toLowerCase().includes(searchTerm.toLowerCase());
-    }
+    // Filter based on active tab
+    if (activeTab === "all") return matchesSearch;
+    if (activeTab === "queries") return item.type === 'query' && matchesSearch;
+    if (activeTab === "resources") return item.type === 'resource' && matchesSearch;
     
-    const subject = getSubjectById(item.subjectId);
-    return subject?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-           item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-           item.content.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesSearch;
   });
 
   if (loading) {
@@ -89,28 +94,75 @@ const Feed = () => {
   }
 
   return (
-    <div className="container py-10">
-      <h1 className="text-3xl font-bold mb-8 text-gradient-primary fade-in">Query Feed</h1>
-      
-      <div className="max-w-2xl mx-auto">
-        {/* Simple Search Bar */}
-        <div className="relative w-full mb-6 fade-in-up">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-          <Input
-            className="pl-9 pr-4 py-6 text-lg"
-            placeholder="Search queries or subjects..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+    <div className="container py-10 px-4 md:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto">
+        <div className="flex flex-col items-start mb-8 fade-in">
+          <h1 className="text-3xl font-bold mb-2 text-gradient-primary">Community Feed</h1>
+          <p className="text-muted-foreground">Discover queries and resources from your communities</p>
+        </div>
+        
+        {/* Enhanced Search Bar */}
+        <div className="relative w-full mb-8 fade-in-up">
+          <div className="flex gap-2">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Input
+                className="pl-9 pr-4 py-6 bg-card/60 backdrop-blur-sm text-lg border-primary/20 shadow-sm"
+                placeholder="Search queries, subjects, resources..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              {searchTerm && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-2 top-2 hover:bg-background/30"
+                  onClick={() => setSearchTerm("")}
+                >
+                  Clear
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Tabs for filtering */}
+        <Tabs 
+          defaultValue="all" 
+          value={activeTab} 
+          onValueChange={setActiveTab}
+          className="w-full mb-6 fade-in-up" 
+          style={{ animationDelay: '0.2s' }}
+        >
+          <TabsList className="w-full max-w-md mx-auto grid grid-cols-3 bg-card/60 backdrop-blur-sm">
+            <TabsTrigger value="all" className="data-[state=active]:bg-primary/10">
+              All
+            </TabsTrigger>
+            <TabsTrigger value="queries" className="data-[state=active]:bg-primary/10">
+              <div className="flex items-center gap-1">
+                <Sparkles className="h-3.5 w-3.5" />
+                <span>Queries</span>
+              </div>
+            </TabsTrigger>
+            <TabsTrigger value="resources" className="data-[state=active]:bg-primary/10">
+              <div className="flex items-center gap-1">
+                <BookOpen className="h-3.5 w-3.5" />
+                <span>Resources</span>
+              </div>
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+
+        {/* Filter stats */}
+        <div className="flex items-center justify-between mb-6 text-sm text-muted-foreground fade-in-up" style={{ animationDelay: '0.3s' }}>
+          <div className="flex items-center gap-2">
+            <Filter className="h-4 w-4" />
+            <span>Showing {filteredItems.length} items</span>
+          </div>
           {searchTerm && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="absolute right-2 top-2"
-              onClick={() => setSearchTerm("")}
-            >
-              Clear
-            </Button>
+            <Badge variant="outline" className="bg-primary/5">
+              Search: "{searchTerm}"
+            </Badge>
           )}
         </div>
 
@@ -118,15 +170,30 @@ const Feed = () => {
         <div className="space-y-4">
           {filteredItems.length > 0 ? (
             filteredItems.map((item, index) => (
-              <div key={item.id} className="fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
+              <div 
+                key={item.id} 
+                className="fade-in-up" 
+                style={{ animationDelay: `${0.1 + index * 0.1}s` }}
+              >
                 <QueryCard query={item} />
               </div>
             ))
           ) : (
-            <div className="text-center py-10 glass-morphism rounded-xl shadow fade-in">
+            <div className="text-center py-10 glass-morphism rounded-xl shadow-md backdrop-blur-xl fade-in bg-card/60">
               <p className="text-muted-foreground">
                 {searchTerm ? "No items match your search." : "No items available in your community."}
               </p>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="mt-4 border-primary/30 hover:bg-primary/10"
+                onClick={() => {
+                  setSearchTerm("");
+                  setActiveTab("all");
+                }}
+              >
+                Clear filters
+              </Button>
             </div>
           )}
         </div>
