@@ -1,4 +1,3 @@
-
 export interface Query {
   id: string;
   title: string;
@@ -11,6 +10,8 @@ export interface Query {
   responses: Response[];
   comments: Comment[];
   imageUrl?: string;
+  type?: 'query' | 'resource'; // Add the optional type property
+  fileUrl?: string; // Add the optional fileUrl property
 }
 
 export interface Response {
