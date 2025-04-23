@@ -34,7 +34,7 @@ const Feed = () => {
   const resourcesArray = teacherResources || [];
   
   const allItems = [
-    ...queriesArray.map(q => ({ ...q, type: 'query' })),
+    ...queriesArray.map(q => ({ ...q, type: 'query' as const })),
     ...resourcesArray.map(r => ({
       id: r.id,
       title: r.title,
@@ -42,7 +42,7 @@ const Feed = () => {
       subjectId: 'educational-resource', // Special subject ID for resources
       authorId: r.teacherId,
       createdAt: r.createdAt,
-      type: 'resource',
+      type: 'resource' as const,
       fileUrl: r.fileUrl,
       fileType: r.fileType,
       upvotes: 0,
