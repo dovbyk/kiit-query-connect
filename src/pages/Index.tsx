@@ -1,15 +1,17 @@
 
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react"; // Corrected import
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const Index = () => {
   const { isAuthenticated, currentUser } = useAuth();
   const navigate = useNavigate();
   
+  useScrollAnimation();
+  
   useEffect(() => {
-    // Debug info
     console.log("Index page rendered with auth state:", { isAuthenticated, currentUser });
   }, [isAuthenticated, currentUser]);
 
@@ -49,17 +51,17 @@ const Index = () => {
       </div>
 
       <div className="grid md:grid-cols-3 gap-8 mt-20 max-w-4xl w-full">
-        <div className="index-gradient-card">
+        <div className="index-gradient-card" style={{ transitionDelay: '0.1s' }}>
           <h3 className="text-xl font-bold mb-3">Ask Queries</h3>
           <p>Post your academic questions and get answers from expert teachers.</p>
         </div>
 
-        <div className="index-gradient-card">
+        <div className="index-gradient-card" style={{ transitionDelay: '0.3s' }}>
           <h3 className="text-xl font-bold mb-3">Community Support</h3>
           <p>Join communities based on your branch and interact with peers.</p>
         </div>
 
-        <div className="index-gradient-card">
+        <div className="index-gradient-card" style={{ transitionDelay: '0.5s' }}>
           <h3 className="text-xl font-bold mb-3">Resource Sharing</h3>
           <p>Teachers share educational resources as PDFs or images.</p>
         </div>
