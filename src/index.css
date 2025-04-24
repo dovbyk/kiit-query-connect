@@ -67,10 +67,10 @@
     width: 100%;
     height: 100%;
     z-index: -1;
-    background-image: url('/patterns/circuit-light.svg');
+    background-image: url('/patterns/white2.svg');
     background-size: 200px 200px;
     background-repeat: repeat;
-    opacity: 0.9;
+    opacity: 0.5;
     pointer-events: none;
   }
 
