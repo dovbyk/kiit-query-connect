@@ -1,4 +1,3 @@
-
 import { useAuth } from "@/context/AuthContext";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
@@ -6,56 +5,39 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { Home, BookPlus, FileText, User, LogOut } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
-
 const Navbar = () => {
-  const { currentUser, isAuthenticated, logout } = useAuth();
+  const {
+    currentUser,
+    isAuthenticated,
+    logout
+  } = useAuth();
   const location = useLocation();
-
   const isActive = (path: string) => location.pathname === path;
-
-  return (
-    <nav className="sticky top-0 z-50 backdrop-blur-xl bg-card/80 py-3 border-b border-primary/20 shadow-sm">
+  return <nav className="sticky top-0 z-50 backdrop-blur-xl bg-card/80 py-3 border-b border-primary/20 shadow-sm">
       <div className="container mx-auto flex justify-between items-center px-4">
         <Link to="/" className="flex items-center gap-2">
-          <span className="text-2xl font-bold bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
+          <span className="text-2xl font-bold bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-gray-300">
             KIIT Query Connect
           </span>
         </Link>
         
         <div className="flex items-center gap-1 md:gap-3">
           <ThemeToggle />
-          {isAuthenticated ? (
-            <>
-              <Link to="/feed" className={`hidden md:flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors ${
-                isActive('/feed') 
-                  ? 'bg-primary/10 text-primary' 
-                  : 'hover:bg-primary/5 text-foreground/80 hover:text-foreground'
-              }`}>
+          {isAuthenticated ? <>
+              <Link to="/feed" className={`hidden md:flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors ${isActive('/feed') ? 'bg-primary/10 text-primary' : 'hover:bg-primary/5 text-foreground/80 hover:text-foreground'}`}>
                 <Home className="h-4 w-4" />
                 <span>Home</span>
               </Link>
               
-              {currentUser?.role === "student" && (
-                <Link to="/ask" className={`hidden md:flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors ${
-                  isActive('/ask') 
-                    ? 'bg-primary/10 text-primary' 
-                    : 'hover:bg-primary/5 text-foreground/80 hover:text-foreground'
-                }`}>
+              {currentUser?.role === "student" && <Link to="/ask" className={`hidden md:flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors ${isActive('/ask') ? 'bg-primary/10 text-primary' : 'hover:bg-primary/5 text-foreground/80 hover:text-foreground'}`}>
                   <BookPlus className="h-4 w-4" />
                   <span>Ask Query</span>
-                </Link>
-              )}
+                </Link>}
               
-              {currentUser?.role === "teacher" && (
-                <Link to="/share-materials" className={`hidden md:flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors ${
-                  isActive('/share-materials') 
-                    ? 'bg-primary/10 text-primary' 
-                    : 'hover:bg-primary/5 text-foreground/80 hover:text-foreground'
-                }`}>
+              {currentUser?.role === "teacher" && <Link to="/share-materials" className={`hidden md:flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors ${isActive('/share-materials') ? 'bg-primary/10 text-primary' : 'hover:bg-primary/5 text-foreground/80 hover:text-foreground'}`}>
                   <FileText className="h-4 w-4" />
                   <span>Share Resources</span>
-                </Link>
-              )}
+                </Link>}
               
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -89,21 +71,16 @@ const Navbar = () => {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            </>
-          ) : (
-            <>
+            </> : <>
               <Link to="/login">
                 <Button variant="ghost" className="border border-primary/10 hover:bg-primary/5">Login</Button>
               </Link>
               <Link to="/register">
                 <Button className="bg-primary/90 hover:bg-primary">Register</Button>
               </Link>
-            </>
-          )}
+            </>}
         </div>
       </div>
-    </nav>
-  );
+    </nav>;
 };
-
 export default Navbar;
