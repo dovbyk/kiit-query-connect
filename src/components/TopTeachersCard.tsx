@@ -11,7 +11,7 @@ export default function TopTeachersCard() {
     .slice(0, 8) as User[];
 
   return (
-    <div className="rounded-xl glass-morphism p-6 mb-6 shadow-lg bg-card/60 animate-fade-in w-full fixed top-4 right-4 z-50">
+    <div className="rounded-xl glass-morphism p-6 mb-6 shadow-lg bg-card/60 animate-fade-in w-full sticky top-4">
 ">
       <div className="flex items-center gap-2 mb-6">
         <Award className="text-yellow-400 h-6 w-6" />
