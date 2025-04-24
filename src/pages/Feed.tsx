@@ -100,31 +100,24 @@ const Feed = () => {
   }
 
   return (
-    <div className="container py-10 px-0 md:px-6 lg:px-8">
-      <div className="w-full grid grid-cols-1 md:grid-cols-6 gap-6 max-w-7xl mx-auto">
+    <div className="container py-10 px-4 md:px-6 lg:px-8">
+      <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-6 max-w-7xl mx-auto">
         {/* Left side (Top Subjects) */}
-        <div className="hidden md:block md:col-span-1">
+        <div className="hidden lg:block lg:col-span-2 h-fit">
           <TopSubjectsCard />
         </div>
 
         {/* Main Feed */}
-        <div className="col-span-1 md:col-span-4">
+        <div className="col-span-1 lg:col-span-7">
           <div className="max-w-3xl mx-auto">
             <div className="flex flex-col items-start mb-8 fade-in">
               <h1 className="text-3xl font-bold mb-2 text-gradient-primary">Community Feed</h1>
               <p className="text-muted-foreground">Discover queries and resources from your communities</p>
             </div>
             
-            {/* Search Bar */}
             <FeedSearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-
-            {/* Tabs */}
             <FeedTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-            
-            {/* Filter stats */}
             <FeedStatsBar filteredLength={filteredItems.length} searchTerm={searchTerm} />
-
-            {/* Queries List */}
             <FeedList
               filteredItems={filteredItems}
               setSearchTerm={setSearchTerm}
@@ -135,7 +128,7 @@ const Feed = () => {
         </div>
 
         {/* Right side (Top Teachers) */}
-        <div className="hidden md:block md:col-span-1">
+        <div className="hidden lg:block lg:col-span-3 h-fit">
           <TopTeachersCard />
         </div>
       </div>
