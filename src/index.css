@@ -70,13 +70,13 @@
     background-image: url('/patterns/circuit-light.svg');
     background-size: 200px 200px;
     background-repeat: repeat;
-    opacity: 0.08;
+    opacity: 0.9;
     pointer-events: none;
   }
 
   .dark body::before {
     background-image: url('/patterns/circuit-dark.svg');
-    opacity: 0.12;
+    opacity: 0.9;
   }
 }
 
